@@ -1,0 +1,87 @@
+﻿@model HomeIndexViewModel
+
+@{
+    ViewData["Title"] = "Favourite Numbers";
+}
+
+<img src="~/images/CloudHWImage.png"
+     asp-append-version="true"
+     class="img-fluid rounded shadow-sm mb-4"
+     alt="Favourite numbers saved to a database"/>
+
+<div class="row g-4">
+    <div class="col-lg-5">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h1 class="h3 mb-3">Add Person</h1>
+
+                @if (TempData["StatusMessage"] is string statusMessage)
+                {
+                    <div class="alert alert-success" role="alert">
+                        @statusMessage
+                    </div>
+                }
+
+                <form asp-action="Index" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Name" class="form-label"></label>
+                        <input asp-for="Name" class="form-control"/>
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="FavouriteNumber" class="form-label"></label>
+                        <input asp-for="FavouriteNumber" class="form-control" type="number"/>
+                        <span asp-validation-for="FavouriteNumber" class="text-danger"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Save to Database</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-7">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h2 class="h3 mb-3">Saved Persons</h2>
+
+                <div class="table-responsive">
+                    <table class="table table-striped align-middle mb-0">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Favourite Number</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @if (Model.Persons.Count == 0)
+                        {
+                            <tr>
+                                <td colspan="2" class="text-center text-muted">No data saved yet.</td>
+                            </tr>
+                        }
+                        else
+                        {
+                            @foreach (var person in Model.Persons)
+                            {
+                                <tr>
+                                    <td>@person.Name</td>
+                                    <td>@person.FavouriteNumber</td>
+                                </tr>
+                            }
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial"/>
+}
