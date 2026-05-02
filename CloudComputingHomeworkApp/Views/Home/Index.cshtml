@@ -1,13 +1,22 @@
 ﻿@model HomeIndexViewModel
+@inject IConfiguration Configuration
 
 @{
     ViewData["Title"] = "Favourite Numbers";
+
+    var staticBaseUrl = Configuration["StaticFiles:BaseUrl"]?.TrimEnd('/');
+
+    string Asset(string path)
+    {
+        return string.IsNullOrWhiteSpace(staticBaseUrl)
+            ? Url.Content($"~/{path}")
+            : $"{staticBaseUrl}/{path}";
+    }
 }
 
-<img src="~/images/CloudHWImage.png"
-     asp-append-version="true"
+<img src="@Asset("images/CloudHWImage.png")"
      class="img-fluid rounded shadow-sm mb-4"
-     alt="Favourite numbers saved to a database"/>
+     alt="Cloud homework image"/>
 
 <div class="row g-4">
     <div class="col-lg-5">

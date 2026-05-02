@@ -1,13 +1,26 @@
-﻿<!DOCTYPE html>
+﻿@inject IConfiguration Configuration
+
+@{
+    var staticBaseUrl = Configuration["StaticFiles:BaseUrl"]?.TrimEnd('/');
+
+    string Asset(string path)
+    {
+        return string.IsNullOrWhiteSpace(staticBaseUrl)
+            ? Url.Content($"~/{path}")
+            : $"{staticBaseUrl}/{path}";
+    }
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>@ViewData["Title"] - Favourite Numbers</title>
     <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
-    <link rel="stylesheet" href="~/CloudComputingHomeworkApp.styles.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="@Asset("lib/bootstrap/dist/css/bootstrap.min.css")"/>
+    <link rel="stylesheet" href="@Asset("css/site.css")"/>
+    <link rel="icon" type="image/x-icon" href="@Asset("favicon.ico")"/>
 </head>
 <body>
 <header>
@@ -39,9 +52,9 @@
         &copy; 2026 - Favourite Numbers
     </div>
 </footer>
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="~/js/site.js" asp-append-version="true"></script>
+<script src="@Asset("lib/jquery/dist/jquery.min.js")"></script>
+<script src="@Asset("lib/bootstrap/dist/js/bootstrap.bundle.min.js")"></script>
+<script src="@Asset("js/site.js")"></script>
 @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

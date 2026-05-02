@@ -1,2 +1,15 @@
-﻿<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-<script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+﻿@inject IConfiguration Configuration
+
+@{
+    var staticBaseUrl = Configuration["StaticFiles:BaseUrl"]?.TrimEnd('/');
+
+    string Asset(string path)
+    {
+        return string.IsNullOrWhiteSpace(staticBaseUrl)
+            ? Url.Content($"~/{path}")
+            : $"{staticBaseUrl}/{path}";
+    }
+}
+
+<script src="@Asset("lib/jquery-validation/dist/jquery.validate.min.js")"></script>
+<script src="@Asset("lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js")"></script>

@@ -33,6 +33,16 @@ jobs:
       - name: Publish
         run: dotnet publish ${{ env.PROJECT_PATH }} --configuration Release --output ${{ env.PUBLISH_DIR }} --no-build /p:UseAppHost=false
 
+      - name: Upload static files to Azure Blob Storage
+        uses: azure/cli@v2
+        with:
+          inlineScript: |
+            az storage blob upload-batch \
+              --destination '$web' \
+              --source CloudComputingHomeworkApp/wwwroot \
+              --connection-string "${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}" \
+              --overwrite true
+
       - name: Deploy to Azure App Service
         uses: azure/webapps-deploy@v3
         with:
