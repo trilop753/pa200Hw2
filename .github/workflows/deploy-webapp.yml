@@ -18,7 +18,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
+      q
+      # Setup + restore + build
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
@@ -30,9 +31,11 @@ jobs:
       - name: Build
         run: dotnet build ${{ env.PROJECT_PATH }} --configuration Release --no-restore
 
+      # Create deployable output files in the publish directory.
       - name: Publish
         run: dotnet publish ${{ env.PROJECT_PATH }} --configuration Release --output ${{ env.PUBLISH_DIR }} --no-build /p:UseAppHost=false
 
+      # Upload static content to Azure Blob Storage.
       - name: Upload static files to Azure Blob Storage
         uses: azure/cli@v2
         with:
@@ -43,6 +46,7 @@ jobs:
               --connection-string "${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}" \
               --overwrite true
 
+      # Deploy the published ASP.NET Core app to Azure App Service.
       - name: Deploy to Azure App Service
         uses: azure/webapps-deploy@v3
         with:
