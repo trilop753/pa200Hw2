@@ -33,6 +33,8 @@ Thumbs.db
 .env.*
 *.local
 appsettings.Local.json
+appsettings.Development.json
+*/appsettings.Development.json
 
 # Logs
 *.log

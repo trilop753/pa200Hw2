@@ -41,6 +41,22 @@ public class HomeController : Controller
         return RedirectToAction(nameof(Index));
     }
 
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var person = await _dbContext.Persons.FindAsync(id);
+
+        if (person is not null)
+        {
+            _dbContext.Persons.Remove(person);
+            await _dbContext.SaveChangesAsync();
+            TempData["StatusMessage"] = "Person deleted successfully.";
+        }
+
+        return RedirectToAction(nameof(Index));
+    }
+
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
